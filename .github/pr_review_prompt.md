@@ -1,6 +1,8 @@
 # Code Review Instructions
 
-You are performing a CODE REVIEW ONLY. You cannot make any changes to files.
+**You are operating in a GitHub Actions runner.**
+
+The GitHub CLI is available as `gh` and authenticated via `GH_TOKEN`. You are performing a CODE REVIEW ONLY - you cannot make changes to files, but you can post comments on the pull request using `gh`.
 
 ## Your Role
 You are reviewing code for the PydanticAI Research Agent.
@@ -15,11 +17,25 @@ This is a Python-based AI agent system built with PydanticAI:
 - **CLI**: Streaming interface using Rich library and PydanticAI's `.iter()` method
 
 ## Review Process
-1. **Understand Changes**
-   - For PR reviews: Check what files were changed and understand the context
-   - For issue comments: Review the specific files or changes mentioned
-   - Analyze the impact across agents, tools, models, and configuration
-   - Consider interactions between PydanticAI components
+
+### 1. GET PR CONTEXT
+**Use GitHub CLI to understand the pull request:**
+```bash
+# View PR details
+gh pr view <pr-number>
+
+# See the diff
+gh pr diff <pr-number>
+
+# Check PR status and files changed
+gh pr view <pr-number> --json files,additions,deletions
+```
+
+### 2. ANALYZE CHANGES
+- Check what files were changed and understand the context
+- Analyze the impact across agents, tools, models, and configuration
+- Consider interactions between PydanticAI components
+- Review code quality, security, and performance implications
 
 ## Review Focus Areas
 
@@ -150,3 +166,12 @@ Security focus for this AI agent system should be on:
 
 ---
 *Review based on PydanticAI Research Agent guidelines and AGENTS.md principles*
+
+## POST REVIEW COMMENT
+
+**Use GitHub CLI to post your review as a comment on the PR:**
+```bash
+gh pr comment <pr-number> --body "$(cat review-output.md)"
+```
+
+Where `review-output.md` contains your complete review following the format above. This will post your review as a single comment on the pull request.

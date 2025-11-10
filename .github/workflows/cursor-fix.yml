@@ -45,14 +45,28 @@ jobs:
       - name: Load fix instructions
         id: load-instructions
         run: |
-          # Read the template and replace the AI_ASSISTANT placeholder
+          # Get the issue or PR number from the event
+          if [ "${{ github.event_name }}" == "issue_comment" ]; then
+            ISSUE_NUMBER="${{ github.event.issue.number }}"
+          else
+            ISSUE_NUMBER="${{ github.event.pull_request.number }}"
+          fi
+
+          # Read the template and replace placeholders
           INSTRUCTIONS=$(cat .github/issue_fix_prompt.md | sed 's/{AI_ASSISTANT}/cursor/g')
-          # Save to file for cursor-agent
-          echo "$INSTRUCTIONS" > /tmp/cursor_fix_prompt.txt
+
+          # Prepend context
+          echo "# GitHub Context" > /tmp/cursor_fix_prompt.txt
+          echo "- Repository: ${{ github.repository }}" >> /tmp/cursor_fix_prompt.txt
+          echo "- Issue/PR Number: ${ISSUE_NUMBER}" >> /tmp/cursor_fix_prompt.txt
+          echo "- Triggered by: ${{ github.event.comment.user.login }}" >> /tmp/cursor_fix_prompt.txt
+          echo "" >> /tmp/cursor_fix_prompt.txt
+          echo "$INSTRUCTIONS" >> /tmp/cursor_fix_prompt.txt
 
       - name: Run Cursor Fix
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Run cursor-agent with the fix instructions and full write permissions
           cursor-agent -p "$(cat /tmp/cursor_fix_prompt.txt)" --model gpt-5 --force

@@ -35,10 +35,23 @@ jobs:
       - name: Load fix instructions
         id: load-instructions
         run: |
+          # Get the issue or PR number from the event
+          if [ "${{ github.event_name }}" == "issue_comment" ]; then
+            ISSUE_NUMBER="${{ github.event.issue.number }}"
+          else
+            ISSUE_NUMBER="${{ github.event.pull_request.number }}"
+          fi
+
           # Read the template and replace the AI_ASSISTANT placeholder
           INSTRUCTIONS=$(cat .github/issue_fix_prompt.md | sed 's/{AI_ASSISTANT}/claude/g')
-          # Use heredoc to preserve multiline content
+
+          # Use heredoc to preserve multiline content with context prepended
           echo "CUSTOM_INSTRUCTIONS<<EOF" >> $GITHUB_OUTPUT
+          echo "# GitHub Context" >> $GITHUB_OUTPUT
+          echo "- Repository: ${{ github.repository }}" >> $GITHUB_OUTPUT
+          echo "- Issue/PR Number: ${ISSUE_NUMBER}" >> $GITHUB_OUTPUT
+          echo "- Triggered by: ${{ github.event.comment.user.login }}" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
           echo "$INSTRUCTIONS" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
@@ -46,6 +59,8 @@ jobs:
         id: claude
         uses: anthropics/claude-code-action@beta
         timeout-minutes: 30
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 

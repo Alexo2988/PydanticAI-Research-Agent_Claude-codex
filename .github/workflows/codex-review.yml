@@ -44,13 +44,30 @@ jobs:
 
       - name: Prepare review instructions
         run: |
-          # Copy the review template for Codex
-          cp .github/pr_review_prompt.md /tmp/codex-review-prompt.md
+          # Get the PR number from the event
+          if [ "${{ github.event_name }}" == "issue_comment" ]; then
+            PR_NUMBER="${{ github.event.issue.number }}"
+          else
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+          fi
+
+          # Read the review template
+          INSTRUCTIONS=$(cat .github/pr_review_prompt.md)
+
+          # Prepend context
+          echo "# GitHub Context" > /tmp/codex-review-prompt.md
+          echo "- Repository: ${{ github.repository }}" >> /tmp/codex-review-prompt.md
+          echo "- PR Number: ${PR_NUMBER}" >> /tmp/codex-review-prompt.md
+          echo "- Triggered by: ${{ github.event.comment.user.login }}" >> /tmp/codex-review-prompt.md
+          echo "" >> /tmp/codex-review-prompt.md
+          echo "$INSTRUCTIONS" >> /tmp/codex-review-prompt.md
 
       - name: Run Codex Review
         id: codex
         uses: openai/codex-action@v1
         timeout-minutes: 15
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
 

@@ -35,10 +35,23 @@ jobs:
       - name: Load review instructions
         id: load-instructions
         run: |
+          # Get the PR number from the event
+          if [ "${{ github.event_name }}" == "issue_comment" ]; then
+            PR_NUMBER="${{ github.event.issue.number }}"
+          else
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+          fi
+
           # Read the review template
           INSTRUCTIONS=$(cat .github/pr_review_prompt.md)
-          # Use heredoc to preserve multiline content
+
+          # Use heredoc to preserve multiline content with context prepended
           echo "CUSTOM_INSTRUCTIONS<<EOF" >> $GITHUB_OUTPUT
+          echo "# GitHub Context" >> $GITHUB_OUTPUT
+          echo "- Repository: ${{ github.repository }}" >> $GITHUB_OUTPUT
+          echo "- PR Number: ${PR_NUMBER}" >> $GITHUB_OUTPUT
+          echo "- Triggered by: ${{ github.event.comment.user.login }}" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
           echo "$INSTRUCTIONS" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
@@ -46,6 +59,8 @@ jobs:
         id: claude
         uses: anthropics/claude-code-action@beta
         timeout-minutes: 15
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 

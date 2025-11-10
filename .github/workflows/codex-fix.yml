@@ -44,13 +44,30 @@ jobs:
 
       - name: Prepare fix instructions
         run: |
-          # Read the template and replace the AI_ASSISTANT placeholder
-          cat .github/issue_fix_prompt.md | sed 's/{AI_ASSISTANT}/codex/g' > /tmp/codex-fix-prompt.md
+          # Get the issue or PR number from the event
+          if [ "${{ github.event_name }}" == "issue_comment" ]; then
+            ISSUE_NUMBER="${{ github.event.issue.number }}"
+          else
+            ISSUE_NUMBER="${{ github.event.pull_request.number }}"
+          fi
+
+          # Read the template and replace placeholders
+          INSTRUCTIONS=$(cat .github/issue_fix_prompt.md | sed 's/{AI_ASSISTANT}/codex/g')
+
+          # Prepend context
+          echo "# GitHub Context" > /tmp/codex-fix-prompt.md
+          echo "- Repository: ${{ github.repository }}" >> /tmp/codex-fix-prompt.md
+          echo "- Issue/PR Number: ${ISSUE_NUMBER}" >> /tmp/codex-fix-prompt.md
+          echo "- Triggered by: ${{ github.event.comment.user.login }}" >> /tmp/codex-fix-prompt.md
+          echo "" >> /tmp/codex-fix-prompt.md
+          echo "$INSTRUCTIONS" >> /tmp/codex-fix-prompt.md
 
       - name: Run Codex Fix
         id: codex
         uses: openai/codex-action@v1
         timeout-minutes: 30
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
 
