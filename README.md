@@ -1,305 +1,305 @@
 # PydanticAI Research & Email Agent System
 
-A production-ready AI agent system built with PydanticAI that combines web research capabilities with Gmail email drafting, featuring a beautiful streaming CLI interface. **This repository also demonstrates automated AI-powered issue fixing and PR review using multiple AI coding assistants.**
+Ein produktionsbereites KI-Agent-System, das mit PydanticAI entwickelt wurde und Web-Recherche-Funktionen mit Gmail E-Mail-Entwürfen kombiniert und dabei eine wunderschöne Streaming-CLI-Oberfläche bietet. **Dieses Repository demonstriert auch die automatisierte KI-gestützte Fehlerbehebung und PR-Review mit mehreren KI-Coding-Assistenten.**
 
-## 🚀 Features
+## 🚀 Funktionen
 
-- **Web Research**: Uses Brave Search API for current, relevant information
-- **Email Drafting**: Creates professional Gmail drafts based on research findings
-- **Agent Delegation**: Research agent delegates email tasks to specialized email agent
-- **Streaming CLI**: Beautiful real-time output using Rich library and PydanticAI's `.iter()` method
-- **OAuth2 Integration**: Secure Gmail authentication with guided setup wizard
-- **Mock Testing**: Comprehensive test suite with TestModel and mock services
-- **Production Ready**: Environment-based configuration, error handling, and logging
-- **AI-Powered Workflows**: Automated issue fixing and PR reviews via Claude Code, Codex, and Cursor
+- **Web-Recherche**: Nutzt die Brave Search API für aktuelle, relevante Informationen
+- **E-Mail-Entwürfe**: Erstellt professionelle Gmail-Entwürfe basierend auf Recherche-Ergebnissen
+- **Agent-Delegation**: Der Recherche-Agent delegiert E-Mail-Aufgaben an spezialisierte E-Mail-Agenten
+- **Streaming CLI**: Wunderschöne Echtzeit-Ausgabe mit der Rich-Bibliothek und PydanticAI's `.iter()`-Methode
+- **OAuth2-Integration**: Sichere Gmail-Authentifizierung mit geführtem Setup-Assistenten
+- **Mock-Testing**: Umfassende Testsuite mit TestModel und Mock-Services
+- **Produktionsbereit**: Umgebungsbasierte Konfiguration, Fehlerbehandlung und Protokollierung
+- **KI-gestützte Workflows**: Automatisierte Fehlerbehebung und PR-Reviews über Claude Code, Codex und Cursor
 
-## 🤖 AI Coding Assistants (GitHub Actions)
+## 🤖 KI-Coding-Assistenten (GitHub Actions)
 
-This repository showcases automated issue handling and code review using three leading AI coding assistants. Simply mention them in issue or PR comments to trigger automated workflows.
+Dieses Repository zeigt die automatisierte Issue-Behandlung und Code-Review mit drei führenden KI-Coding-Assistenten. Erwähnen Sie sie einfach in Issue- oder PR-Kommentaren, um automatisierte Workflows auszulösen.
 
-### Available Commands
+### Verfügbare Befehle
 
-- **Claude Code**: `@claude-fix` or `@claude-review`
-- **OpenAI Codex**: `@codex-fix` or `@codex-review`
-- **Cursor**: `@cursor-fix` or `@cursor-review`
+- **Claude Code**: `@claude-fix` oder `@claude-review`
+- **OpenAI Codex**: `@codex-fix` oder `@codex-review`
+- **Cursor**: `@cursor-fix` oder `@cursor-review`
 
-### Setup Instructions
+### Setup-Anweisungen
 
-Add the following secrets to your GitHub repository (`Settings → Secrets and variables → Actions → New repository secret`):
+Fügen Sie die folgenden Secrets zu Ihrem GitHub-Repository hinzu (`Settings → Secrets and variables → Actions → New repository secret`):
 
 1. **Claude Code**: `CLAUDE_CODE_OAUTH_TOKEN`
-   - Install Claude CLI: `npm install -g @anthropic-ai/claude-code`
-   - Generate token: `claude setup-token` (creates a 1-year token starting with `sk-ant-oat01-`)
-   - Copy the generated token
-2. **OpenAI Codex**: `OPENAI_API_KEY` - [Get from OpenAI platform](https://platform.openai.com/api-keys)
-3. **Cursor**: `CURSOR_API_KEY` - [Generate from Cursor dashboard](https://cursor.com/)
+   - Installieren Sie Claude CLI: `npm install -g @anthropic-ai/claude-code`
+   - Token generieren: `claude setup-token` (erstellt einen 1-Jahres-Token beginnend mit `sk-ant-oat01-`)
+   - Kopieren Sie den generierten Token
+2. **OpenAI Codex**: `OPENAI_API_KEY` - [Von der OpenAI-Plattform erhalten](https://platform.openai.com/api-keys)
+3. **Cursor**: `CURSOR_API_KEY` - [Vom Cursor-Dashboard generieren](https://cursor.com/)
 
-### How It Works
+### Funktionsweise
 
-The workflows use reusable prompt templates (`.github/issue_fix_prompt.md` and `.github/pr_review_prompt.md`) that define the fix and review processes. Each AI assistant workflow loads these templates and customizes them with the appropriate branch naming suffix (`-claude`, `-codex`, or `-cursor`). This ensures consistency across all AI assistants while maintaining separate attribution for fixes and reviews.
+Die Workflows verwenden wiederverwendbare Prompt-Vorlagen (`.github/issue_fix_prompt.md` und `.github/pr_review_prompt.md`), die die Fix- und Review-Prozesse definieren. Jeder KI-Assistent-Workflow lädt diese Vorlagen und passt sie mit dem entsprechenden Branch-Namenssuffix an (`-claude`, `-codex` oder `-cursor`). Dies gewährleistet Konsistenz über alle KI-Assistenten hinweg und behält gleichzeitig separate Zuordnungen für Fixes und Reviews bei.
 
-**Workflow Files**:
-- `.github/workflows/claude_code/` - Claude Code workflows
-- `.github/workflows/codex/` - OpenAI Codex workflows
-- `.github/workflows/cursor/` - Cursor workflows
+**Workflow-Dateien**:
+- `.github/workflows/claude_code/` - Claude Code Workflows
+- `.github/workflows/codex/` - OpenAI Codex Workflows
+- `.github/workflows/cursor/` - Cursor Workflows
 
-## 🏗️ Pydantic AI Agent Architecture
+## 🏗️ Pydantic AI Agent Architektur
 
 ```
-├── agents/          # PydanticAI agents
-│   ├── research_agent.py    # Main research agent with Brave search
-│   └── email_agent.py       # Gmail draft creation agent
-├── config/          # Settings and model providers
-│   ├── settings.py          # Environment-based configuration
-│   └── providers.py         # LLM model setup
-├── models/          # Pydantic data models
-│   ├── email_models.py      # Email-related models
-│   ├── research_models.py   # Research data models
-│   └── agent_models.py      # Generic agent models
-├── tools/           # Tool functions
-│   ├── brave_search.py      # Brave Search API integration
-│   └── gmail_tools.py       # Gmail OAuth2 and draft creation
-├── tests/           # Test suite
+├── agents/          # PydanticAI Agenten
+│   ├── research_agent.py    # Haupt-Recherche-Agent mit Brave Search
+│   └── email_agent.py       # Gmail-Entwurf-Erstellungs-Agent
+├── config/          # Einstellungen und Modell-Provider
+│   ├── settings.py          # Umgebungsbasierte Konfiguration
+│   └── providers.py         # LLM-Modell-Setup
+├── models/          # Pydantic-Datenmodelle
+│   ├── email_models.py      # E-Mail-bezogene Modelle
+│   ├── research_models.py   # Recherche-Datenmodelle
+│   └── agent_models.py      # Generische Agent-Modelle
+├── tools/           # Tool-Funktionen
+│   ├── brave_search.py      # Brave Search API-Integration
+│   └── gmail_tools.py       # Gmail OAuth2 und Entwurf-Erstellung
+├── tests/           # Test-Suite
 │   ├── test_research_agent.py
 │   ├── test_email_agent.py
 │   └── pytest.ini
-├── gmail_setup.py   # Gmail OAuth2 setup wizard
-└── research_email_cli.py  # Main CLI application
+├── gmail_setup.py   # Gmail OAuth2 Setup-Assistent
+└── research_email_cli.py  # Haupt-CLI-Anwendung
 ```
 
-## 📋 Prerequisites
+## 📋 Voraussetzungen
 
-1. **Python 3.11+** with virtual environment capability
-2. **API Keys**:
-   - OpenAI API key (for LLM)
-   - Brave Search API key (for web search)
-3. **Gmail OAuth2 Setup**:
-   - Google Cloud Project with Gmail API enabled
-   - OAuth2 credentials downloaded from Google Cloud Console
+1. **Python 3.11+** mit Virtual Environment-Funktionalität
+2. **API-Schlüssel**:
+   - OpenAI API-Schlüssel (für LLM)
+   - Brave Search API-Schlüssel (für Web-Suche)
+3. **Gmail OAuth2-Setup**:
+   - Google Cloud-Projekt mit aktivierter Gmail API
+   - OAuth2-Anmeldedaten von der Google Cloud Console heruntergeladen
 
 ## 🛠️ Installation
 
-1. **Clone and setup virtual environment**:
+1. **Klonen und Virtual Environment einrichten**:
    ```bash
    git clone <repository-url>
    cd PydanticAI-Research-Agent
    python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/bin/activate  # Unter Windows: venv\Scripts\activate
    ```
 
-2. **Install dependencies**:
+2. **Abhängigkeiten installieren**:
    ```bash
    pip install 'pydantic-ai-slim[openai]' httpx rich python-dotenv
    pip install google-auth google-auth-oauthlib google-api-python-client
-   pip install pytest pytest-asyncio  # For testing
+   pip install pytest pytest-asyncio  # Für Tests
    ```
 
-3. **Configure environment**:
+3. **Umgebung konfigurieren**:
    ```bash
    cp .env.example .env
-   # Edit .env with your API keys
+   # Bearbeiten Sie .env mit Ihren API-Schlüsseln
    ```
 
-4. **Setup Gmail OAuth2**:
+4. **Gmail OAuth2 einrichten**:
    ```bash
    python gmail_setup.py
    ```
 
-## ⚙️ Configuration
+## ⚙️ Konfiguration
 
-### Environment Variables (.env)
+### Umgebungsvariablen (.env)
 
 ```bash
-# LLM Configuration
+# LLM-Konfiguration
 LLM_PROVIDER=openai
-LLM_API_KEY=your-openai-api-key-here
+LLM_API_KEY=ihr-openai-api-schlüssel-hier
 LLM_MODEL=gpt-4o
 LLM_BASE_URL=https://api.openai.com/v1
 
-# Brave Search Configuration
-BRAVE_API_KEY=your-brave-search-api-key-here
+# Brave Search-Konfiguration
+BRAVE_API_KEY=ihr-brave-search-api-schlüssel-hier
 
-# Gmail OAuth2 Configuration  
+# Gmail OAuth2-Konfiguration  
 GMAIL_CREDENTIALS_PATH=credentials.json
 GMAIL_TOKEN_PATH=token.pickle
 
-# Application Configuration
+# Anwendungskonfiguration
 APP_ENV=development
 LOG_LEVEL=INFO
 DEBUG=false
 ```
 
-### Gmail OAuth2 Setup
+### Gmail OAuth2-Setup
 
-1. **Create Google Cloud Project**:
-   - Go to [Google Cloud Console](https://console.cloud.google.com)
-   - Create new project or select existing
+1. **Google Cloud-Projekt erstellen**:
+   - Gehen Sie zur [Google Cloud Console](https://console.cloud.google.com)
+   - Erstellen Sie ein neues Projekt oder wählen Sie ein bestehendes aus
 
-2. **Enable Gmail API**:
-   - Go to APIs & Services > Library
-   - Search "Gmail API" and enable
+2. **Gmail API aktivieren**:
+   - Gehen Sie zu APIs & Services > Library
+   - Suchen Sie "Gmail API" und aktivieren Sie es
 
-3. **Create OAuth2 Credentials**:
-   - Go to APIs & Services > Credentials
-   - Create OAuth 2.0 Client ID for Desktop application
-   - Download as `credentials.json`
+3. **OAuth2-Anmeldedaten erstellen**:
+   - Gehen Sie zu APIs & Services > Credentials
+   - Erstellen Sie eine OAuth 2.0 Client-ID für Desktop-Anwendung
+   - Als `credentials.json` herunterladen
 
-4. **Run Setup Wizard**:
+4. **Setup-Assistenten ausführen**:
    ```bash
    python gmail_setup.py
    ```
 
-## 🎯 Usage
+## 🎯 Verwendung
 
-### CLI Interface
+### CLI-Schnittstelle
 
 ```bash
 source venv/bin/activate
 python research_email_cli.py
 ```
 
-### Example Queries
+### Beispiel-Anfragen
 
-- "Research AI safety trends and email summary to john@company.com"
-- "Find latest developments in quantum computing"
-- "Create email draft about market analysis for jane.doe@firm.com"
+- "Recherchiere KI-Sicherheitstrends und sende eine Zusammenfassung per E-Mail an john@company.com"
+- "Finde die neuesten Entwicklungen im Quantencomputing"
+- "Erstelle einen E-Mail-Entwurf über Marktanalyse für jane.doe@firm.com"
 
-### Programmatic Usage
+### Programmatische Verwendung
 
 ```python
 from agents import research_agent, ResearchAgentDependencies
 from config.settings import settings
 
-# Create dependencies
+# Abhängigkeiten erstellen
 deps = ResearchAgentDependencies(
     brave_api_key=settings.brave_api_key,
     gmail_credentials_path=settings.gmail_credentials_path,
     gmail_token_path=settings.gmail_token_path
 )
 
-# Run research agent
+# Recherche-Agent ausführen
 result = await research_agent.run(
-    "Research machine learning trends",
+    "Recherchiere Machine Learning-Trends",
     deps=deps
 )
 ```
 
-## 🧪 Testing
+## 🧪 Tests
 
-Run the test suite with pytest:
+Führen Sie die Test-Suite mit pytest aus:
 
 ```bash
 source venv/bin/activate
 python -m pytest tests/ -v
 ```
 
-### Test Environment
+### Test-Umgebung
 
-Tests use mock services and TestModel for validation without external API calls:
+Tests verwenden Mock-Services und TestModel für die Validierung ohne externe API-Aufrufe:
 
 ```python
-# Enable test mode
+# Test-Modus aktivieren
 import os
 os.environ['TESTING'] = 'true'
 
-# Use TestModel for predictable responses
+# TestModel für vorhersagbare Antworten verwenden
 from pydantic_ai.models.test import TestModel
 test_model = TestModel()
 
 with research_agent.override(model=test_model):
-    result = research_agent.run_sync("Test query", deps=deps)
+    result = research_agent.run_sync("Test-Anfrage", deps=deps)
 ```
 
-## 🔧 Development
+## 🔧 Entwicklung
 
-### Agent Tools
+### Agent-Tools
 
-**Research Agent**:
-- `search_web`: Brave Search API integration
-- `create_email_draft`: Delegates to email agent
-- `summarize_research`: Creates structured summaries
+**Recherche-Agent**:
+- `search_web`: Brave Search API-Integration
+- `create_email_draft`: Delegiert an E-Mail-Agent
+- `summarize_research`: Erstellt strukturierte Zusammenfassungen
 
-**Email Agent**:
-- `authenticate_gmail`: OAuth2 authentication
-- `create_gmail_draft`: Draft creation in Gmail
-- `compose_email_content`: Professional email composition
+**E-Mail-Agent**:
+- `authenticate_gmail`: OAuth2-Authentifizierung
+- `create_gmail_draft`: Entwurf-Erstellung in Gmail
+- `compose_email_content`: Professionelle E-Mail-Komposition
 
-### Error Handling
+### Fehlerbehandlung
 
-The system includes comprehensive error handling:
+Das System beinhaltet umfassende Fehlerbehandlung:
 
-- **Gmail OAuth2**: Detailed setup guidance and token refresh
-- **API Failures**: Graceful degradation and retry mechanisms  
-- **Network Issues**: Timeout handling and connection recovery
-- **User Guidance**: Actionable error messages with next steps
+- **Gmail OAuth2**: Detaillierte Setup-Anleitung und Token-Aktualisierung
+- **API-Fehler**: Graceful Degradation und Retry-Mechanismen
+- **Netzwerk-Probleme**: Timeout-Behandlung und Verbindungswiederherstellung
+- **Benutzer-Führung**: Umsetzbare Fehlermeldungen mit nächsten Schritten
 
-### Security Features
+### Sicherheits-Features
 
-- **Environment Variables**: No hardcoded secrets
-- **OAuth2 Flow**: Secure Gmail authentication
-- **Input Validation**: Pydantic model validation
-- **API Key Protection**: Never logged or exposed in errors
+- **Umgebungsvariablen**: Keine fest codierten Geheimnisse
+- **OAuth2-Flow**: Sichere Gmail-Authentifizierung
+- **Input-Validierung**: Pydantic-Modell-Validierung
+- **API-Schlüssel-Schutz**: Niemals protokolliert oder in Fehlern preisgegeben
 
-## 📚 PydanticAI Patterns Used
+## 📚 Verwendete PydanticAI-Muster
 
-This implementation demonstrates key PydanticAI patterns:
+Diese Implementierung demonstriert wichtige PydanticAI-Muster:
 
-- **Agent Composition**: Multiple specialized agents working together
-- **Dependency Injection**: Clean separation of concerns with `deps_type`
-- **Tool Integration**: `@agent.tool` decorators with proper context
-- **Model Override**: TestModel for development and testing
-- **Streaming Output**: Real-time CLI with `.iter()` method
-- **Usage Tracking**: Token counting across agent delegations
-- **Error Recovery**: Graceful handling of external service failures
+- **Agent-Komposition**: Mehrere spezialisierte Agenten arbeiten zusammen
+- **Dependency Injection**: Saubere Trennung der Belange mit `deps_type`
+- **Tool-Integration**: `@agent.tool`-Dekoratoren mit richtigem Kontext
+- **Modell-Override**: TestModel für Entwicklung und Tests
+- **Streaming-Ausgabe**: Echtzeit-CLI mit `.iter()`-Methode
+- **Usage-Tracking**: Token-Zählung über Agent-Delegationen hinweg
+- **Fehler-Wiederherstellung**: Graceful Behandlung von externen Service-Fehlern
 
-## 🚨 Important Notes
+## 🚨 Wichtige Hinweise
 
-- **Never commit** `credentials.json` or `token.pickle` to version control
-- **Add to .gitignore**: All sensitive files are properly excluded
-- **API Rate Limits**: Brave Search has usage quotas - monitor consumption
-- **Token Expiry**: Gmail tokens refresh automatically but may need re-authentication
-- **Mock Mode**: Set `TESTING=true` for development without real API calls
+- **Niemals committen**: `credentials.json` oder `token.pickle` in die Versionskontrolle
+- **Zu .gitignore hinzufügen**: Alle sensiblen Dateien sind ordnungsgemäß ausgeschlossen
+- **API-Rate-Limits**: Brave Search hat Nutzungsquoten - überwachen Sie den Verbrauch
+- **Token-Ablauf**: Gmail-Token werden automatisch aktualisiert, können aber eine erneute Authentifizierung erfordern
+- **Mock-Modus**: Setzen Sie `TESTING=true` für Entwicklung ohne echte API-Aufrufe
 
-## 🆘 Troubleshooting
+## 🆘 Fehlerbehebung
 
-### Common Issues
+### Häufige Probleme
 
 1. **"No module named 'pydantic_ai'"**:
    ```bash
    pip install 'pydantic-ai-slim[openai]'
    ```
 
-2. **Gmail authentication errors**:
+2. **Gmail-Authentifizierungsfehler**:
    ```bash
-   python gmail_setup.py  # Re-run OAuth2 setup
+   python gmail_setup.py  # OAuth2-Setup erneut ausführen
    ```
 
-3. **Import errors**:
+3. **Import-Fehler**:
    ```bash
-   source venv/bin/activate  # Ensure virtual environment is active
+   source venv/bin/activate  # Sicherstellen, dass Virtual Environment aktiv ist
    ```
 
-4. **Missing API keys**:
-   - Check `.env` file exists and has valid keys
-   - Verify environment variables are loaded
+4. **Fehlende API-Schlüssel**:
+   - Überprüfen Sie, ob die `.env`-Datei existiert und gültige Schlüssel hat
+   - Verifizieren Sie, dass Umgebungsvariablen geladen wurden
 
-## 📖 Learn More
+## 📖 Mehr erfahren
 
-- [PydanticAI Documentation](https://ai.pydantic.dev/)
+- [PydanticAI-Dokumentation](https://ai.pydantic.dev/)
 - [Brave Search API](https://brave.com/search/api/)
 - [Gmail API Python Quickstart](https://developers.google.com/workspace/gmail/api/quickstart/python)
-- [Rich Library Documentation](https://rich.readthedocs.io/)
+- [Rich Library-Dokumentation](https://rich.readthedocs.io/)
 
-## 🤝 Contributing
+## 🤝 Mitwirken
 
-This project follows PydanticAI best practices:
+Dieses Projekt folgt PydanticAI-Best-Practices:
 
-- Use environment-based configuration
-- Implement comprehensive error handling
-- Include TestModel validation for all agents
-- Follow agent-to-agent delegation patterns
-- Maintain security standards for API keys and OAuth2
+- Verwenden Sie umgebungsbasierte Konfiguration
+- Implementieren Sie umfassende Fehlerbehandlung
+- Fügen Sie TestModel-Validierung für alle Agenten hinzu
+- Folgen Sie Agent-zu-Agent-Delegationsmustern
+- Halten Sie Sicherheitsstandards für API-Schlüssel und OAuth2 ein
 
 ---
 
-Built with ❤️ using [PydanticAI](https://ai.pydantic.dev/) and following production-ready development practices.
+Erstellt mit ❤️ unter Verwendung von [PydanticAI](https://ai.pydantic.dev/) und nach produktionsbereiten Entwicklungspraktiken.
